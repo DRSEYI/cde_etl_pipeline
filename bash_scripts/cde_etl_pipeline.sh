@@ -13,6 +13,7 @@
  
 set  -euo pipefail
 
+SOURCE_URL=https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv
 
 #Define the directories for each of the  layers
 RAW_DIR="data/raw"
