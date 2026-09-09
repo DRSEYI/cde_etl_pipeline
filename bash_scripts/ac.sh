@@ -51,3 +51,21 @@ NR == 1 {
       {print $Year,$Value,$Units,$variable_code
 }
 ' "$PROCESSED_DIR/transformed.csv" > "$PROCESSED_DIR/2023_year_finance.csv" && echo "Finance file successfully created"
+
+
+
+if [ ! -d "$GOLD_DIR" ]; then
+        mkdir  -p "$GOLD_DIR"
+        echo "$GOLD_DIR folder created"
+else
+        echo "$GOLD_DIR already exists"
+fi
+
+#Copy the transformed  folder to the gold layer and renamed as gold.csv
+cp "$PROCESSED_DIR/2023_year_finance.csv" "$GOLD_DIR/gold.csv"  && echo "Final stage reached"
+
+
+
+
+
+
