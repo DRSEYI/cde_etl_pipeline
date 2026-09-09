@@ -13,14 +13,23 @@
  
 set  -euo pipefail
 
-SOURCE_URL=https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv
+#Stores SOURCE_URL in this file instead of placing  it directly  on the script
+#This opted for  majorly for the cron to be able to locate the source file
+ENV_FILE="/home/seyiodude/cde_etl/.env"
 
-#Define the directories for each of the  layers
+#Load environment variables from the configuration file
+source "$ENV_FILE"
+
+#confirm that source_file was loaded and is not empty
+: "${SOURCE_URL:?set SOURCE_URL in $ENV_FILE}"
+
+
+#Define the directories used by each processing layer
 RAW_DIR="data/raw"
 PROCESSED_DIR="data/transformed"
 GOLD_DIR="data/gold"
 
-#create  the directories and the -p prevents error if the dictories already exist.
+#create the directories and the -p prevents error if the dictories already exist.
 
 mkdir -p "$RAW_DIR" "$PROCESSED_DIR" "$GOLD_DIR"
 
