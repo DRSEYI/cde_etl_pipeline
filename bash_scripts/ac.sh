@@ -1,19 +1,24 @@
 #!/bin/bash
 
-echo "e dey work"
 
+# CDE_ETL ASSIGNMENT 
+# Author: Seyi
+# Purpose: Download survey data, standardise columns,
+# extract finance metrics and load into gold layer.
+set  -euo pipefail
 
 RAW_DIR="data/raw"
 PROCESSED_DIR="data/transformed"
 GOLD_DIR="data/gold"
 
-#create folder if it does not exist
+#create the raw folder if it does not exist
 if [ ! -d "$RAW_DIR" ];then
         mkdir -p "$RAW_DIR"
         echo "Created: $RAW_DIR"
 else
         echo "folder already exists :$RAW_DIR"
 fi
+
 
 
 #Download the data from the already set environment variable.The link is in the source url
