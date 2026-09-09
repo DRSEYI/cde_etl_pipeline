@@ -1,14 +1,16 @@
-!/bin/bash
+#!/bin/bash
 
+#==========================================================================
 
 # CDE_ETL ASSIGNMENT 
 # Author: Seyi
 # Purpose: Download survey data, standardise columns,
 # extract finance metrics and load into gold layer.
 
-##===========================================================================
+#===========================================================================
 
-#Stops the script when  there is any error 
+#Stops the script when  there is any error
+ 
 set  -euo pipefail
 
 
@@ -20,11 +22,9 @@ GOLD_DIR="data/gold"
 #create  the directories and the -p prevents error if the dictories already exist.
 
 mkdir -p "$RAW_DIR" "$PROCESSED_DIR" "$GOLD_DIR"
-        
 
 
-
-#Download  dataset using the SOURCE_URL  environment variable.The file is saved as survey23.csv
+#Download dataset using the SOURCE_URL environment variable.The file is saved as survey23.csv
 wget -O "$RAW_DIR/survey23.csv" "$SOURCE_URL"  && echo "Download completed"
 
 
