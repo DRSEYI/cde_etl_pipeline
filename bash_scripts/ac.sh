@@ -1,44 +1,40 @@
-#!/bin/bash
+!/bin/bash
 
 
 # CDE_ETL ASSIGNMENT 
 # Author: Seyi
 # Purpose: Download survey data, standardise columns,
 # extract finance metrics and load into gold layer.
+
+##===========================================================================
+
+#Stops the script when  there is any error 
 set  -euo pipefail
 
+
+#Define the directories for each of the  layers
 RAW_DIR="data/raw"
 PROCESSED_DIR="data/transformed"
 GOLD_DIR="data/gold"
 
-#create the raw folder if it does not exist
-if [ ! -d "$RAW_DIR" ];then
-        mkdir -p "$RAW_DIR"
-        echo "Created: $RAW_DIR"
-else
-        echo "folder already exists :$RAW_DIR"
-fi
+#create  the directories and the -p prevents error if the dictories already exist.
+
+mkdir -p "$RAW_DIR" "$PROCESSED_DIR" "$GOLD_DIR"
+        
 
 
 
-#Download the data from the already set environment variable.The link is in the source url
-wget -O "$RAW_DIR/survey23.csv" "$SOURCE_URL"
+#Download  dataset using the SOURCE_URL  environment variable.The file is saved as survey23.csv
+wget -O "$RAW_DIR/survey23.csv" "$SOURCE_URL"  && echo "Download completed"
 
-echo "download completed"
 
-if  [ ! -d "$PROCESSED_DIR" ]; then
-        mkdir -p "$PROCESSED_DIR"
-        echo " $PROCESSED_DIR :folder created"
-else
-        echo "Folder  already exist"
-fi
 
-##copy the raw file to the transformed folder
+##Standardise the variable_code column  name 
 
 sed '1s/Variable_code/variable_code/' "$RAW_DIR/survey23.csv" > "$PROCESSED_DIR/transformed.csv"
 
 
-#select the four columns and add them to create a new file
+#Extract the Year,Value,Units,variable_code  columns and save in a new file.
 
 awk -F',' '
 BEGIN{
@@ -55,19 +51,10 @@ NR == 1 {
      }
       {print $Year,$Value,$Units,$variable_code
 }
-' "$PROCESSED_DIR/transformed.csv" > "$PROCESSED_DIR/2023_year_finance.csv" && echo "Finance file successfully created"
-
-
-
-if [ ! -d "$GOLD_DIR" ]; then
-        mkdir  -p "$GOLD_DIR"
-        echo "$GOLD_DIR folder created"
-else
-        echo "$GOLD_DIR already exists"
-fi
+' "$PROCESSED_DIR/transformed.csv" > "$PROCESSED_DIR/2023_year_finance.csv" && echo "Transformation completed and ready for shipping"
 
 #Copy the transformed  folder to the gold layer and renamed as gold.csv
-cp "$PROCESSED_DIR/2023_year_finance.csv" "$GOLD_DIR/gold.csv"  && echo "Final stage reached"
+cp "$PROCESSED_DIR/2023_year_finance.csv" "$GOLD_DIR/gold.csv"  && echo "Gold data published: $GOLD_DIR/"
 
 
 
